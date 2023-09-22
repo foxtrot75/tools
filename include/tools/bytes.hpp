@@ -36,14 +36,14 @@ inline std::string bytesToHex(std::vector<uint8_t> const& v)
 
 inline std::string bytesToHex(std::string const& v)
 {
-    return bytesToHex(std::vector<uint8_t>{v.begin(), v.end()});
+    return bytesToHex(std::vector<uint8_t>(v.begin(), v.end()));
 }
 
 template <typename Numeric>
 inline std::string bytesToHex(Numeric const v)
 {
     Numeric rv = swap(v);
-    return bytesToHex(std::vector<uint8_t>{(uint8_t*)&rv, (uint8_t*)&rv+sizeof(Numeric)});
+    return bytesToHex(std::vector<uint8_t>((uint8_t*)&rv, (uint8_t*)&rv+sizeof(Numeric)));
 }
 
 inline std::vector<uint8_t> hexToBytes(std::string hex)
