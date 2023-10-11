@@ -31,8 +31,9 @@ inline std::string readFile(std::filesystem::path const& path, bool trim = true)
             result.reserve(maybeSize);
 
         f.seekg(0, std::ios::beg);
-        result.assign(std::istreambuf_iterator<char>(f),
-                      std::istreambuf_iterator<char>());
+        result.assign(
+            std::istreambuf_iterator<char>(f),
+            std::istreambuf_iterator<char>());
 
         if(trim)
             trimStr(result);

@@ -113,7 +113,9 @@ inline bool zipFile(std::filesystem::path const& in, std::filesystem::path const
     return true;
 }
 
-inline bool archiveFiles(std::vector<std::filesystem::path> const& in, std::filesystem::path const& out)
+inline bool archiveFiles(
+    std::vector<std::filesystem::path> const& in,
+    std::filesystem::path const& out)
 {
     archive* arch = archive_write_new();
     archive_write_set_format_zip(arch);
