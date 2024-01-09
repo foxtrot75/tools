@@ -5,22 +5,17 @@
 namespace tools
 {
 
-namespace
-{
-
 // Determines if a character is within the specified range
 inline bool inRange(uint8_t u, uint8_t lower, uint8_t upper)
 {
     return ((u >= lower) && (u <= upper));
 }
 
-}
-
-inline std::string utf8ToCp1251(std::string const& str)
+inline std::string utf8ToCp1251(std::string_view str)
 {
     std::string res(str.size() * 2 + 2, '\0');
 
-    for(size_t i = 0, j = 0; i < str.size(); ++i) {
+    for(std::size_t i = 0, j = 0; i < str.size(); ++i)
         if(str[i] < 128) {
             res[j++] = str[i];
         } else {
@@ -51,16 +46,15 @@ inline std::string utf8ToCp1251(std::string const& str)
             // if none of the above is true, data char is simply ignored
             // dest counter won't be incremented in this case
         }
-    }
 
-    return res.data();
+    return res;
 }
 
-inline std::string cp1251ToUtf8(std::string const& str)
+inline std::string cp1251ToUtf8(std::string_view str)
 {
     std::string res(str.size() * 2 + 2, '\0');
 
-    for(size_t i = 0, j = 0; i < str.size(); ++i) {
+    for(std::size_t i = 0, j = 0; i < str.size(); ++i)
         if(str[i] < 128) {
             res[j++] = str[i];
         } else {
@@ -87,9 +81,8 @@ inline std::string cp1251ToUtf8(std::string const& str)
             // if none of the above is true, data char is simply ignored
             // dest counter won't be incremented in this case
         }
-    }
 
-    return res.data();
+    return res;
 }
 
 }

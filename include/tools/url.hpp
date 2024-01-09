@@ -6,22 +6,15 @@
 namespace tools
 {
 
-inline std::string urlEncode(std::string const& in)
+inline std::string urlEncode(std::string_view in)
 {
-    std::string out;
-    out.reserve(in.size() * 1.5);
-
-    for(uint8_t c : in) {
-        if(std::isalnum(c)) {
-            out.push_back(c);
-        } else {
-            std::stringstream ss;
+    std::stringstream ss;
+    for(uint8_t c: in)
+        if(std::isalnum(c))
+            ss << c;
+        else
             ss << "%" << std::hex << std::setfill('0') << std::setw(2) << (uint16_t)c;
-            out.append(ss.str());
-        }
-    }
-
-    return out;
+    return ss.str();
 }
 
 }

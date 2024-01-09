@@ -8,10 +8,9 @@
 namespace tools
 {
 
-inline std::string aes256CbcDecode(std::string const& data, std::string const& key)
+inline std::string aes256CbcDecode(std::string_view key, std::string_view data)
 {
-    size_t const offset = AES_BLOCK_SIZE + 32;
-
+    std::size_t const offset = AES_BLOCK_SIZE + 32;
     std::string out(data.size(), 0);
     int len = out.size();
 
@@ -22,7 +21,6 @@ inline std::string aes256CbcDecode(std::string const& data, std::string const& k
     EVP_CIPHER_CTX_free(ctx);
 
     out.resize(data.size() - offset);
-
     return out;
 }
 

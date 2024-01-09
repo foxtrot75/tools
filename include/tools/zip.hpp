@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <fstream>
 #include <filesystem>
 
@@ -13,7 +14,7 @@
 namespace tools
 {
 
-inline std::string zip(std::string const& data)
+inline std::string zip(std::string_view data)
 {
     std::string result;
 
@@ -27,9 +28,9 @@ inline std::string zip(std::string const& data)
     if(deflateInit(&stream, Z_BEST_COMPRESSION) != Z_OK)
         return {};
 
-    size_t zipSize = 0;
+    std::size_t zipSize = 0;
     do {
-        size_t resize = zipSize + data.size() * 2;
+        std::size_t resize = zipSize + data.size() * 2;
         result.resize(resize);
         stream.avail_out = (uint)(data.size() * 2);
         stream.next_out = (Bytef*)(&result[0] + zipSize);
@@ -49,7 +50,7 @@ inline std::string zip(std::string const& data)
     return result;
 }
 
-inline std::string unzip(std::string const& data)
+inline std::string unzip(std::string_view data)
 {
     std::string result;
 
@@ -74,9 +75,9 @@ inline std::string unzip(std::string const& data)
     if(inflateInit(&stream) != Z_OK)
         return {};
 
-    size_t unzipSize = 0;
+    std::size_t unzipSize = 0;
     do {
-        size_t resize = unzipSize + data.size() * 2;
+        std::size_t resize = unzipSize + data.size() * 2;
         result.resize(resize);
         stream.avail_out = (uint)(data.size() * 2);
         stream.next_out = (Bytef*)(&result[0] + unzipSize);
@@ -96,7 +97,9 @@ inline std::string unzip(std::string const& data)
     return result;
 }
 
-inline bool zipFile(std::filesystem::path const& in, std::filesystem::path const& out)
+inline bool zipFile(
+    std::filesystem::path const& in,
+    std::filesystem::path const& out)
 {
     std::ifstream ifs(in);
     gzFile outFile = gzopen(out.c_str(), "wb");
@@ -105,7 +108,7 @@ inline bool zipFile(std::filesystem::path const& in, std::filesystem::path const
         return false;
 
     std::string tmp(1024, '\0');
-    while(size_t available = ifs.readsome(tmp.data(), tmp.size()))
+    while(std::size_t available = ifs.readsome(tmp.data(), tmp.size()))
         gzwrite(outFile, tmp.data(), available);
 
     gzclose(outFile);
@@ -121,7 +124,7 @@ inline bool archiveFiles(
     archive_write_set_format_zip(arch);
     archive_write_open_filename(arch, out.c_str());
 
-    for(auto& file : in) {
+    for(auto& file: in) {
         struct stat st;
         stat(file.c_str(), &st);
 
@@ -132,7 +135,7 @@ inline bool archiveFiles(
 
         std::ifstream ifs(file);
         std::string tmp(1024, '\0');
-        while(size_t available = ifs.readsome(tmp.data(), tmp.size()))
+        while(std::size_t available = ifs.readsome(tmp.data(), tmp.size()))
             archive_write_data(arch, tmp.data(), available);
 
         archive_entry_free(entry);

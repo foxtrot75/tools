@@ -6,23 +6,19 @@
 namespace tools
 {
 
-namespace {
-
-static const std::string base64Chars =
+constexpr std::string_view base64Chars =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     "abcdefghijklmnopqrstuvwxyz"
     "0123456789+/";
 
-}
-
-inline std::string base64Encode(std::string const& in)
+inline std::string base64Encode(std::string_view in)
 {
     std::string out;
 
     int val = 0;
     int valb = -6;
 
-    for(uint8_t c : in) {
+    for(uint8_t c: in) {
         val = (val << 8) + c;
         valb += 8;
 
@@ -41,7 +37,7 @@ inline std::string base64Encode(std::string const& in)
     return out;
 }
 
-inline std::string base64Decode(std::string const& in)
+inline std::string base64Decode(std::string_view in)
 {
     std::string out;
     std::vector<int> T(256, -1);
@@ -52,7 +48,7 @@ inline std::string base64Decode(std::string const& in)
     int val = 0;
     int valb = -8;
 
-    for(uint8_t c : in) {
+    for(uint8_t c: in) {
         if(T[c] == -1)
             break;
 
